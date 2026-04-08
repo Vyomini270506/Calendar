@@ -4,10 +4,11 @@ import { motion } from "motion/react";
 import HeroImage from "./HeroImage";
 import MonthGrid from "./MonthGrid";
 import NotesPanel from "./NotesPanel";
+import SeasonEffects from "./SeasonEffects";
 
 const MONTH_DATA = {
   0: { image: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&q=80&w=1000", quote: "And now we welcome the new year. Full of things that have never been.", author: "Rainer Maria Rilke" },
-  1: { image: "https://images.unsplash.com/photo-1544819667-9750f78eeaa2?auto=format&fit=crop&q=80&w=1000", quote: "In the depth of winter I finally learned that there was in me an invincible summer.", author: "Albert Camus" },
+  1: { image: "https://unsplash.com/blog/content/images/2023/03/wolfgang-hasselmann-E-lsG3EU4NA-unsplash.jpg", quote: "In the depth of winter I finally learned that there was in me an invincible summer.", author: "Albert Camus" },
   2: { image: "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?auto=format&fit=crop&q=80&w=1000", quote: "It was one of those March days when the sun shines hot and the wind blows cold: when it is summer in the light, and winter in the shade.", author: "Charles Dickens" },
   3: { image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=1000", quote: "April hath put a spirit of youth in everything.", author: "William Shakespeare" },
   4: { image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000", quote: "All things seem possible in May.", author: "Edwin Way Teale" },
@@ -39,12 +40,7 @@ export default function Calendar() {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
-
-    if (!range.start || (range.start && range.end)) {
-      setRange({ start: date, end: null });
-    } else {
-      setRange(prev => ({ ...prev, end: date }));
-    }
+    setRange({ start: date, end: null });
   };
 
   const handleAddNote = (content, date) => {
@@ -61,7 +57,8 @@ export default function Calendar() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0] lg:p-12 p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-[#f0f0f0] lg:p-12 p-4 flex items-center justify-center relative">
+      <SeasonEffects month={currentDate.getMonth()} />
       <motion.div
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

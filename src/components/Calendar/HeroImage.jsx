@@ -36,7 +36,7 @@ export default function HeroImage({ monthName, imageUrl, quote, author }) {
             className="h-[1px] bg-white/60"
           />
           <span className="text-white/80 text-[10px] font-bold tracking-[0.3em] uppercase">
-
+            Life Goes On
           </span>
         </motion.div>
       </div>
@@ -48,12 +48,12 @@ export default function HeroImage({ monthName, imageUrl, quote, author }) {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-white text-7xl lg:text-9xl font-serif italic tracking-tighter"
+            className="text-white text-7xl lg:text-6xl font-serif italic tracking-tighter"
           >
             {monthName}
           </motion.h2>
         </div>
-        
+
         <motion.div
           key={quote}
           initial={{ opacity: 0, x: 20 }}
