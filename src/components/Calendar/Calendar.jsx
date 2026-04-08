@@ -40,7 +40,15 @@ export default function Calendar() {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
-    setRange({ start: date, end: null });
+    if (!range.start || (range.start && range.end)) {
+      setRange({ start: date, end: null });
+    } else {
+      if (date < range.start) {
+        setRange({ start: date, end: range.start });
+      } else {
+        setRange(prev => ({ ...prev, end: date }));
+      }
+    }
   };
 
   const handleAddNote = (content, date) => {
@@ -88,7 +96,7 @@ export default function Calendar() {
             notes={notes}
             onAddNote={handleAddNote}
             onDeleteNote={handleDeleteNote}
-            selectedDate={selectedDate}
+            range={range}
             currentDate={currentDate}
           />
         </div>

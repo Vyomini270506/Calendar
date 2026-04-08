@@ -46,27 +46,27 @@ export default function MonthGrid({ currentDate, onDateClick, onMonthChange, ran
 
   return (
     <div className="p-8 lg:p-12 bg-white h-full flex flex-col">
-      <div className="flex items-center justify-between mb-12">
-        <div className="relative overflow-hidden pt-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-12 gap-4">
+        <div className="relative pt-6 min-w-0 flex-grow overflow-hidden">
           <span className="absolute top-0 left-0 text-[10px] font-bold tracking-[0.2em] text-black/30 uppercase">
             Timeline
           </span>
           <AnimatePresence mode="wait">
             <motion.h3
               key={currentDate.toISOString()}
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: "100%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
+              exit={{ y: "-100%", opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="text-4xl font-serif font-black tracking-tighter block"
+              className="text-[8vw] sm:text-3xl lg:text-4xl font-serif font-black tracking-tighter flex items-baseline whitespace-nowrap"
             >
-              {format(currentDate, "MMMM")}
+              <span>{format(currentDate, "MMMM")}</span>
               <span className="text-black/10 ml-2">{format(currentDate, "yyyy")}</span>
             </motion.h3>
           </AnimatePresence>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <motion.button
             whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.05)" }}
             whileTap={{ scale: 0.9 }}

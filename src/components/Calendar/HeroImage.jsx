@@ -42,13 +42,13 @@ export default function HeroImage({ monthName, imageUrl, quote, author }) {
       </div>
 
       <div className="absolute bottom-12 right-8 left-8 z-10 flex flex-col items-end">
-        <div className="overflow-hidden mb-6 text-right w-full">
+        <div className="mb-6 text-right w-full flex justify-end">
           <motion.h2
             key={monthName}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
+            initial={{ opacity: 0, scale: 0.9, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-white text-7xl lg:text-6xl font-serif italic tracking-tighter"
+            className="text-white text-[12vw] sm:text-6xl lg:text-5xl xl:text-7xl font-serif italic tracking-tighter whitespace-nowrap"
           >
             {monthName}
           </motion.h2>

@@ -1,20 +1,46 @@
-import { format, isSameDay } from "date-fns";
+import { format, isSameDay, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 import { Plus, Trash2, StickyNote } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import React, { useState } from "react";
 
-export default function NotesPanel({ notes, onAddNote, onDeleteNote, selectedDate }) {
+export default function NotesPanel({ notes, onAddNote, onDeleteNote, range, currentDate }) {
   const [newNote, setNewNote] = useState("");
 
-  const filteredNotes = notes.filter(note =>
-    !selectedDate || isSameDay(new Date(note.date), selectedDate)
-  );
+  const filteredNotes = notes.filter(note => {
+    if (!range?.start) return true;
+    
+    const noteDate = new Date(note.date);
+    if (range.start && !range.end) {
+      return isSameDay(noteDate, range.start);
+    }
+    
+    if (range.start && range.end) {
+      const start = range.start < range.end ? range.start : range.end;
+      const end = range.start < range.end ? range.end : range.start;
+      try {
+        return isWithinInterval(noteDate, { start: startOfDay(start), end: endOfDay(end) });
+      } catch {
+        return false;
+      }
+    }
+    
+    return true;
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!newNote.trim()) return;
-    onAddNote(newNote, selectedDate || undefined);
+    onAddNote(newNote, range?.end || range?.start || undefined);
     setNewNote("");
+  };
+
+  const getHeaderTitle = () => {
+    if (!range?.start) return "Journal";
+    if (range.start && !range.end) return `Notes for ${format(range.start, "MMM d")}`;
+    
+    const start = range.start < range.end ? range.start : range.end;
+    const end = range.start < range.end ? range.end : range.start;
+    return `Notes ${format(start, "MMM d")} - ${format(end, "MMM d")}`;
   };
 
   return (
@@ -35,13 +61,13 @@ export default function NotesPanel({ notes, onAddNote, onDeleteNote, selectedDat
         </motion.div>
         <AnimatePresence mode="wait">
           <motion.h3
-            key={selectedDate ? selectedDate.toISOString() : 'all'}
+            key={range?.start ? (range?.end ? 'range' : 'single') : 'all'}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="text-2xl font-serif italic"
           >
-            {selectedDate ? `Notes for ${format(selectedDate, "MMM d")}` : "Journal"}
+            {getHeaderTitle()}
           </motion.h3>
         </AnimatePresence>
       </div>
@@ -52,7 +78,7 @@ export default function NotesPanel({ notes, onAddNote, onDeleteNote, selectedDat
             type="text"
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
-            placeholder={selectedDate ? "Add a note for this day..." : "Add a general memo..."}
+            placeholder={range?.start ? "Add a note for this period..." : "Add a general memo..."}
             className="w-full bg-white border border-black/10 rounded-xl px-4 py-3 pr-16 text-sm focus:outline-none focus:border-black/30 transition-shadow transition-colors"
           />
           <motion.button
